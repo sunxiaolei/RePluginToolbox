@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#33A1C9</color>
+    <color name="colorPrimaryDark">#33A1C9</color>
+    <color name="colorAccent">#33A1C9</color>
+
+    <color name="colorHalfTrans">#00000000</color>
+
+    <color name="colorBg">#EEEEEE</color>
+    <color name="colorTextItemPrimary">#333333</color>
+    <color name="colorTextItemSecondary">#666666</color>
+    <color name="colorTextTitle">#E5E5E5</color>
+    <color name="colorTextMark">#FF634D</color>
+</resources>

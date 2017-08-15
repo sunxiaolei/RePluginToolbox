@@ -1,0 +1,73 @@
+ext {
+    android = [
+            compileSdkVersion: 25,
+            buildToolsVersion: '25.0.2',
+            minSdkVersion    : 19,
+            targetSdkVersion : 25,
+            versionCode      : 100,
+            versionName      : '1.0.0'
+    ]
+
+    dependencies = [
+            //RePlugin
+            'replugin'                 : 'com.qihoo360.replugin:replugin-plugin-lib:2.1.7',
+            //Android
+            'appcompat-v7'             : 'com.android.support:appcompat-v7:25.3.1',
+            'design'                   : 'com.android.support:design:25.3.1',
+            'cardview-v7'              : 'com.android.support:cardview-v7:25.3.1',
+            'recyclerview-v7'          : 'com.android.support:recyclerview-v7:25.3.1',
+            //RxJava
+            'rxandroid'                : 'io.reactivex.rxjava2:rxandroid:2.0.1',
+            'rxjava'                   : 'io.reactivex.rxjava2:rxjava:2.1.0',
+            //RxLifecycle
+            'rxlifecycle'              : 'com.trello.rxlifecycle2:rxlifecycle:2.1.0',
+            'rxlifecycle-components'   : 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0',
+            //RxBinding
+            'rxbinding'                : 'com.jakewharton.rxbinding2:rxbinding:2.0.0',
+            'rxbinding-support-v4'     : 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0',
+            'rxbinding-appcompat-v7'   : 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0',
+            'rxbinding-design'         : 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0',
+            'rxbinding-recyclerview-v7': 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0',
+            //Butter Knife
+            'butterknife'              : 'com.jakewharton:butterknife:8.7.0',
+            'butterknife-compiler'     : 'com.jakewharton:butterknife-compiler:8.7.0',//annotationProcessor
+            //Retrofit
+            'retrofit'                 : 'com.squareup.retrofit2:retrofit:2.3.0',
+            'adapter-rxjava2'          : 'com.squareup.retrofit2:adapter-rxjava2:2.3.0',
+            'converter-gson'           : 'com.squareup.retrofit2:converter-gson:2.3.0',
+            'converter-scalars'        : 'com.squareup.retrofit2:converter-scalars:2.3.0',
+            //ImageLoader
+            'glide'                    : 'com.github.bumptech.glide:glide:4.0.0',
+            'fresco'                   : 'com.facebook.fresco:fresco:1.3.0',
+            //Json format
+            'gson'                     : 'com.google.code.gson:gson:2.8.0',
+            //Common utils
+            'utils'                    : 'com.github.sunxiaolei:my-utils:1.0.6',
+            //Swipeback
+            'swipeback'                : 'com.github.sunxiaolei:swipeback:1.0.0',
+            //Guava
+            'guava'                    : 'com.google.guava:guava:22.0-android',
+            //RxPermissions
+            'rxpermissions'            : 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar',
+            //debug bridge
+            'stetho'                   : 'com.facebook.stetho:stetho:1.5.0',
+            'stetho-okhttp3'           : 'com.facebook.stetho:stetho-okhttp3:1.5.0',
+            //multidex
+            'multidex'                 : 'com.android.support:multidex:1.0.1',
+            //leakcanary
+            'leakcanary-debug'         : 'com.squareup.leakcanary:leakcanary-android:1.5.1',//debugCompile
+            'leakcanary-release'       : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1',//releaseCompile
+            'leakcanary-test'          : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1',//testCompile
+            //Database
+            'litepal'                  : 'org.litepal.android:core:1.5.1',
+            //ui
+            'nineoldandroids'          : 'com.nineoldandroids:library:2.4.0',
+            'vlayout'                  : 'com.alibaba.android:vlayout:1.0.9@aar',//transitive = true
+            'adapter-helper'           : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18',
+            'flowingdrawer'            : 'com.mxn.soul:flowingdrawer-core:2.0.0',
+            'loading'                  : 'com.github.sunxiaolei:LoadingDialog:1.0.0',
+            'md-dialog'                : 'com.afollestad.material-dialogs:core:0.9.4.5',
+            'md-dialog-commons'        : 'com.afollestad.material-dialogs:commons:0.9.4.5',
+
+    ]
+}
