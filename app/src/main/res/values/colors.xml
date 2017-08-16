@@ -7,6 +7,7 @@
     <color name="colorHalfTrans">#00000000</color>
 
     <color name="colorBg">#EEEEEE</color>
+    <color name="colorItemBg">#FFFFFF</color>
     <color name="colorTextItemPrimary">#333333</color>
     <color name="colorTextItemSecondary">#666666</color>
     <color name="colorTextTitle">#E5E5E5</color>

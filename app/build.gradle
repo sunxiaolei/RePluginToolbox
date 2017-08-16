@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'replugin-plugin-gradle'
+//apply plugin: 'replugin-plugin-gradle'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -52,10 +52,10 @@ dependencies {
     compile rootProject.ext.dependencies['appcompat-v7']
     compile rootProject.ext.dependencies['recyclerview-v7']
     compile rootProject.ext.dependencies['cardview-v7']
-    compile rootProject.ext.dependencies['replugin']
-//    compile rootProject.ext.dependencies['retrofit']
-//    compile rootProject.ext.dependencies['adapter-rxjava2']
-//    compile rootProject.ext.dependencies['converter-gson']
+//    compile rootProject.ext.dependencies['replugin']
+    compile rootProject.ext.dependencies['retrofit']
+    compile rootProject.ext.dependencies['adapter-rxjava2']
+    compile rootProject.ext.dependencies['converter-gson']
     compile rootProject.ext.dependencies['rxandroid']
     compile rootProject.ext.dependencies['rxjava']
     compile rootProject.ext.dependencies['rxlifecycle']
@@ -67,11 +67,12 @@ dependencies {
     compile rootProject.ext.dependencies['rxbinding-recyclerview-v7']
     compile rootProject.ext.dependencies['adapter-helper']
     compile rootProject.ext.dependencies['utils']
-//    compile rootProject.ext.dependencies['glide']
+    compile rootProject.ext.dependencies['glide']
     compile rootProject.ext.dependencies['swipeback']
     compile rootProject.ext.dependencies['loading']
     compile rootProject.ext.dependencies['md-dialog']
     compile rootProject.ext.dependencies['md-dialog-commons']
+    compile 'com.github.promeg:tinypinyin:2.0.3'
 }
 
 public class BuildTimeListener implements TaskExecutionListener, BuildListener {
@@ -100,12 +101,16 @@ public class BuildTimeListener implements TaskExecutionListener, BuildListener {
             }
         }
     }
+
     @Override
     void buildStarted(Gradle gradle) {}
+
     @Override
     void projectsEvaluated(Gradle gradle) {}
+
     @Override
     void projectsLoaded(Gradle gradle) {}
+
     @Override
     void settingsEvaluated(Settings settings) {}
 }

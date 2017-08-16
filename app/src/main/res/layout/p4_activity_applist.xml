@@ -9,6 +9,36 @@
 
     <include layout="@layout/p4_common_toolbar"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorItemBg"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_applist_sort"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:spinnerMode="dropdown"/>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cb_applist_showsys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:checked="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/cb_applist_showsys"
+            android:text="显示系统应用"/>
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_applist"
         android:layout_width="match_parent"
