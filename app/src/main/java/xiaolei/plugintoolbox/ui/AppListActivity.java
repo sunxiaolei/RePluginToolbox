@@ -6,16 +6,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.promeg.pinyinhelper.Pinyin;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
@@ -40,10 +44,11 @@ import xiaolei.plugintoolbox.utils.SchedulersCompat;
 
 public class AppListActivity extends BaseActivity {
 
-    private AppCompatSpinner mSpinner;
-    private AppCompatCheckBox mCheckBox;
-    private RecyclerView mRecyclerView;
-    private AppListAdapter mAdapter;
+    private AppCompatEditText mEtSearch;
+    private AppCompatSpinner mSpinnerSort;
+    private AppCompatCheckBox mCheckBoxSys;
+    private RecyclerView mRvApps;
+    private AppListAdapter mAdapterApp;
 
     private MaterialDialog mDialog;
 
@@ -67,14 +72,33 @@ public class AppListActivity extends BaseActivity {
 
     private void initView() {
         tvTitle.setText("应用列表");
-        mSpinner = (AppCompatSpinner) findViewById(R.id.spinner_applist_sort);
+        mEtSearch = (AppCompatEditText) findViewById(R.id.et_search);
+        mEtSearch.setEnabled(false);
+        RxTextView.afterTextChangeEvents(mEtSearch)
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(event -> {
+                    searchApp();
+                });
+        View rootView = findViewById(R.id.layout_applist_root);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(
+                () -> {
+                    int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
+                    if (heightDiff > 100) {
+                        mEtSearch.setCursorVisible(true);
+                    } else {
+                        mEtSearch.setCursorVisible(false);
+                    }
+                }
+        );
+
+        mSpinnerSort = (AppCompatSpinner) findViewById(R.id.spinner_applist_sort);
         ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-                new String[]{"名称正序", "名称倒序"});
-        mSpinner.setAdapter(arrayAdapter);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                new String[]{"名称升序", "名称降序", "权限升序", "权限降序"});
+        mSpinnerSort.setAdapter(arrayAdapter);
+        mSpinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                List<AppModel> list = mAdapter.getData();
+                List<AppModel> list = mAdapterApp.getData();
                 switch (position) {
                     case 0:
                         Collections.sort(list);
@@ -83,9 +107,15 @@ public class AppListActivity extends BaseActivity {
                         Collections.sort(list);
                         Collections.reverse(list);
                         break;
+                    case 2:
+                        Collections.sort(list, (o1, o2) -> o1.getPermission().size() - o2.getPermission().size());
+                        break;
+                    case 3:
+                        Collections.sort(list, (o1, o2) -> o2.getPermission().size() - o1.getPermission().size());
+                        break;
 
                 }
-                mAdapter.setNewData(list);
+                mAdapterApp.setNewData(list);
             }
 
             @Override
@@ -93,21 +123,21 @@ public class AppListActivity extends BaseActivity {
 
             }
         });
-        mCheckBox = (AppCompatCheckBox) findViewById(R.id.cb_applist_showsys);
-        mCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        mCheckBoxSys = (AppCompatCheckBox) findViewById(R.id.cb_applist_showsys);
+        mCheckBoxSys.setOnCheckedChangeListener((buttonView, isChecked) -> {
             List<AppModel> listNoSys = new ArrayList<>();
             Flowable.fromIterable(listAll)
                     .filter(model -> !model.isSystemApp())
                     .subscribe(model -> listNoSys.add(model));
-            mAdapter.setNewData(isChecked ? listAll : listNoSys);
+            mAdapterApp.setNewData(isChecked ? listAll : listNoSys);
 
         });
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_applist);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new AppListAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        mRvApps = (RecyclerView) findViewById(R.id.rv_applist);
+        mRvApps.setLayoutManager(new LinearLayoutManager(this));
+        mAdapterApp = new AppListAdapter();
+        mRvApps.setAdapter(mAdapterApp);
 
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+        mAdapterApp.setOnItemClickListener((adapter, view, position) -> {
             AppModel app = (AppModel) adapter.getItem(position);
             if (mDialog == null) {
                 mDialog = new MaterialDialog.Builder(AppListActivity.this)
@@ -130,6 +160,7 @@ public class AppListActivity extends BaseActivity {
                         AppUtils.uninstallApp(app.getAppPackage());
                         break;
                     case "详情":
+                        AppDetailActivity.startThisActivity(this, app.getAppPackage());
                         break;
                     case "分享":
                         break;
@@ -145,8 +176,8 @@ public class AppListActivity extends BaseActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String uninstallPkg = intent.getDataString().substring(8);
-                if (mAdapter.getItem(uninstallPosition).getAppPackage().equals(uninstallPkg)) {
-                    mAdapter.remove(uninstallPosition);
+                if (mAdapterApp.getItem(uninstallPosition).getAppPackage().equals(uninstallPkg)) {
+                    mAdapterApp.remove(uninstallPosition);
                 }
             }
         };
@@ -157,7 +188,7 @@ public class AppListActivity extends BaseActivity {
 
     private void getAppList() {
         Flowable.create((FlowableOnSubscribe<List<AppModel>>) e -> {
-            List<PackageInfo> infos = getPackageManager().getInstalledPackages(0);
+            List<PackageInfo> infos = getPackageManager().getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_PERMISSIONS);
             List<AppModel> apps = new ArrayList<>();
             for (PackageInfo info : infos) {
                 AppModel app = new AppModel();
@@ -165,12 +196,14 @@ public class AppListActivity extends BaseActivity {
                 app.setAppVersionCode(info.versionCode);
                 app.setAppVersionName(info.versionName);
                 app.setAppName(AppUtils.getAppName(info.packageName));
+                app.setAppNamePinyin(Pinyin.toPinyin(AppUtils.getAppName(info.packageName), " "));
                 app.setAppIcon(AppUtils.getAppIcon(info.packageName));
                 app.setSystemApp(((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0) ? false : true);
                 app.setSourcePath(info.applicationInfo.sourceDir);
                 app.setSize(FileUtils.getFileSize(info.applicationInfo.sourceDir));
                 app.setFirstInstallTime(info.firstInstallTime);
                 app.setLastUpdateTime(info.lastUpdateTime);
+                app.setPermission(info.requestedPermissions == null ? new ArrayList<>() : Arrays.asList(info.requestedPermissions));
                 apps.add(app);
             }
             e.onNext(apps);
@@ -180,12 +213,28 @@ public class AppListActivity extends BaseActivity {
                 .subscribe(models -> {
                     dismissDialog();
                     findViewById(R.id.layout_applist_top).setVisibility(View.VISIBLE);
+                    mEtSearch.setEnabled(true);
                     Collections.sort(models);
-                    mAdapter.setNewData(models);
+                    mAdapterApp.setNewData(models);
                     listAll = models;
                 });
     }
 
+    private void searchApp() {
+        if (listAll == null) {
+            return;
+        }
+        if (TextUtils.isEmpty(mEtSearch.getText().toString())) {
+            mAdapterApp.setNewData(listAll);
+            return;
+        }
+        List<AppModel> list = new ArrayList<>();
+        Flowable.fromIterable(listAll)
+                .filter(model -> model.getAppName().contains(mEtSearch.getText().toString().toUpperCase())
+                        || model.getAppPinyinHead().contains(mEtSearch.getText().toString().toUpperCase()))
+                .subscribe(model -> list.add(model));
+        mAdapterApp.setNewData(list);
+    }
 
     @Override
     protected void onDestroy() {

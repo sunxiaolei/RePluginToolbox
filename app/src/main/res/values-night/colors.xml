@@ -10,4 +10,5 @@
     <color name="colorItemBg">#000000</color>
     <color name="colorTextItemPrimary">#E5E5E5</color>
     <color name="colorTextItemSecondary">#D5D5D5</color>
+    <color name="colorLine">#342354</color>
 </resources>

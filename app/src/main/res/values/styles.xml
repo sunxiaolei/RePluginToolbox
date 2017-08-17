@@ -15,4 +15,10 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="divider_line">
+        <item name="android:background">@color/colorLine</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+    </style>
+
 </resources>

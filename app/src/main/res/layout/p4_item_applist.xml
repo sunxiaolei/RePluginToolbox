@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_item_icon"
             android:orientation="vertical">
 
@@ -45,37 +45,51 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/tv_item_pkg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorTextItemSecondary"
-                    android:textSize="12sp"/>
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/tv_item_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
                     android:textColor="@color/colorTextItemSecondary"
-                    android:textSize="12sp"/>
+                    android:textSize="11sp"/>
+
+                <TextView
+                    android:id="@+id/tv_item_pkg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/tv_item_size"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/colorTextItemSecondary"
+                    android:textSize="11sp"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/tv_item_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:maxLength="10"
                     android:textColor="@color/colorTextItemSecondary"
-                    android:textSize="12sp"/>
+                    android:textSize="11sp"/>
+
+                <TextView
+                    android:id="@+id/tv_item_permission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/colorTextItemSecondary"
+                    android:textSize="11sp"/>
 
                 <TextView
                     android:id="@+id/tv_item_system"
@@ -84,7 +98,7 @@
                     android:layout_alignParentRight="true"
                     android:text="系统应用"
                     android:textColor="@color/colorTextMark"
-                    android:textSize="12sp"/>
+                    android:textSize="11sp"/>
 
             </RelativeLayout>
 

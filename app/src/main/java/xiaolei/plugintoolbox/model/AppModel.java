@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.github.promeg.pinyinhelper.Pinyin;
 
-import java.util.Comparator;
+import java.io.Serializable;
+import java.util.List;
+
 
 /**
  * Created by sunxl8 on 2017/8/14.
@@ -14,6 +16,8 @@ import java.util.Comparator;
 public class AppModel implements Comparable<AppModel> {
 
     private String appName;
+
+    private String appNamePinyin;
 
     private String appPackage;
 
@@ -32,6 +36,24 @@ public class AppModel implements Comparable<AppModel> {
     private long firstInstallTime;
 
     private long lastUpdateTime;
+
+    private List<String> permission;
+
+    public String getAppNamePinyin() {
+        return appNamePinyin;
+    }
+
+    public void setAppNamePinyin(String appNamePinyin) {
+        this.appNamePinyin = appNamePinyin;
+    }
+
+    public List<String> getPermission() {
+        return permission;
+    }
+
+    public void setPermission(List<String> permission) {
+        this.permission = permission;
+    }
 
     public long getFirstInstallTime() {
         return firstInstallTime;
@@ -113,10 +135,20 @@ public class AppModel implements Comparable<AppModel> {
         this.appVersionName = appVersionName;
     }
 
+    public String getAppPinyinHead() {
+        String[] s = getAppNamePinyin().split(" ");
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < s.length; i++) {
+            if (s[i].length() > 0) {
+                sb.append(s[i].substring(0, 1));
+            }
+        }
+        return sb.toString().toUpperCase();
+    }
 
     @Override
     public int compareTo(@NonNull AppModel o) {
-        return Pinyin.toPinyin(this.getAppName(), "").toUpperCase()
-                .compareTo(Pinyin.toPinyin(o.getAppName(), "").toUpperCase());
+        return getAppNamePinyin().toUpperCase()
+                .compareTo(o.getAppNamePinyin().toUpperCase());
     }
 }

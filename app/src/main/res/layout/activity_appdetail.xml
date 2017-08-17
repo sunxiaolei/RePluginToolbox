@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/p4_common_toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorItemBg"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:id="@+id/tv_appdetail_basic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:paddingBottom="10dp"
+                android:paddingTop="15dp"
+                android:textColor="@color/colorTextItemPrimary"
+                android:textSize="14sp"/>
+
+            <View
+                style="@style/divider_line"/>
+
+            <TextView
+                android:id="@+id/tv_appdetail_permission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:paddingBottom="10dp"
+                android:paddingTop="15dp"
+                android:text="权限列表"
+                android:textColor="@color/colorTextItemPrimary"
+                android:textSize="14sp"/>
+
+            <View
+                style="@style/divider_line"/>
+
+            <TextView
+                android:id="@+id/tv_appdetail_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:text="注册的Activity"
+                android:textColor="@color/colorTextItemPrimary"
+                android:textSize="14sp"/>
+
+            <View
+                style="@style/divider_line"/>
+
+            <TextView
+                android:id="@+id/tv_appdetail_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:text="注册的Service"
+                android:textColor="@color/colorTextItemPrimary"
+                android:textSize="14sp"/>
+
+            <View
+                style="@style/divider_line"/>
+
+            <TextView
+                android:id="@+id/tv_appdetail_receiver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:text="注册的Receiver"
+                android:textColor="@color/colorTextItemPrimary"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

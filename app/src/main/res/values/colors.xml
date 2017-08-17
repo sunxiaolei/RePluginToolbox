@@ -12,4 +12,5 @@
     <color name="colorTextItemSecondary">#666666</color>
     <color name="colorTextTitle">#E5E5E5</color>
     <color name="colorTextMark">#FF634D</color>
+    <color name="colorLine">#DCDCDC</color>
 </resources>

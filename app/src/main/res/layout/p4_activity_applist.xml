@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/layout_applist_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +8,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/p4_common_toolbar"/>
+    <android.support.v7.widget.Toolbar
+        style="@style/CusToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStart="0dp"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="5dp"
+                app:srcCompat="@drawable/ic_back"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/iv_back"
+                android:ellipsize="end"
+                android:paddingRight="18dp"
+                android:singleLine="true"
+                android:textColor="@color/colorTextTitle"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/et_search"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="18dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="search..."
+                android:padding="7dp"
+                android:textColor="@color/colorTextItemPrimary"
+                android:textColorHint="@color/colorTextItemSecondary"
+                android:textSize="13sp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:id="@+id/layout_applist_top"
