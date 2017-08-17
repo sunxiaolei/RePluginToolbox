@@ -1,12 +1,17 @@
 package xiaolei.plugintoolbox.model;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+
+import com.github.promeg.pinyinhelper.Pinyin;
+
+import java.util.Comparator;
 
 /**
  * Created by sunxl8 on 2017/8/14.
  */
 
-public class AppModel {
+public class AppModel implements Comparable<AppModel> {
 
     private String appName;
 
@@ -106,5 +111,12 @@ public class AppModel {
 
     public void setAppVersionName(String appVersionName) {
         this.appVersionName = appVersionName;
+    }
+
+
+    @Override
+    public int compareTo(@NonNull AppModel o) {
+        return Pinyin.toPinyin(this.getAppName(), "").toUpperCase()
+                .compareTo(Pinyin.toPinyin(o.getAppName(), "").toUpperCase());
     }
 }

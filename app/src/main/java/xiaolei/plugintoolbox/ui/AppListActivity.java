@@ -19,6 +19,7 @@ import com.github.promeg.pinyinhelper.Pinyin;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,12 +77,11 @@ public class AppListActivity extends BaseActivity {
                 List<AppModel> list = mAdapter.getData();
                 switch (position) {
                     case 0:
-                        list.sort((o1, o2) -> Pinyin.toPinyin(o1.getAppName(), "")
-                                .compareTo(Pinyin.toPinyin(o2.getAppName(), "")));
+                        Collections.sort(list);
                         break;
                     case 1:
-                        list.sort((o1, o2) -> Pinyin.toPinyin(o2.getAppName(), "")
-                                .compareTo(Pinyin.toPinyin(o1.getAppName(), "")));
+                        Collections.sort(list);
+                        Collections.reverse(list);
                         break;
 
                 }
@@ -179,7 +179,8 @@ public class AppListActivity extends BaseActivity {
                 .compose(SchedulersCompat.applyIoSchedulers())
                 .subscribe(models -> {
                     dismissDialog();
-                    Collections.sort(models, (o1, o2) -> o1.getAppName().compareTo(o2.getAppName()));
+                    findViewById(R.id.layout_applist_top).setVisibility(View.VISIBLE);
+                    Collections.sort(models);
                     mAdapter.setNewData(models);
                     listAll = models;
                 });
