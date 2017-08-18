@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
@@ -22,6 +23,7 @@ import com.github.promeg.pinyinhelper.Pinyin;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,6 +39,7 @@ import xiaolei.plugintoolbox.R;
 import xiaolei.plugintoolbox.base.BaseActivity;
 import xiaolei.plugintoolbox.model.AppModel;
 import xiaolei.plugintoolbox.utils.SchedulersCompat;
+import xiaolei.plugintoolbox.utils.ShareUtils;
 
 /**
  * Created by sunxl8 on 2017/8/14.
@@ -74,14 +77,15 @@ public class AppListActivity extends BaseActivity {
         tvTitle.setText("应用列表");
         mEtSearch = (AppCompatEditText) findViewById(R.id.et_search);
         mEtSearch.setEnabled(false);
+        //搜索
         RxTextView.afterTextChangeEvents(mEtSearch)
                 .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(event -> {
                     searchApp();
                 });
         View rootView = findViewById(R.id.layout_applist_root);
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(
-                () -> {
+        //监听键盘
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
                     int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
                     if (heightDiff > 100) {
                         mEtSearch.setCursorVisible(true);
@@ -91,6 +95,7 @@ public class AppListActivity extends BaseActivity {
                 }
         );
 
+        //排序
         mSpinnerSort = (AppCompatSpinner) findViewById(R.id.spinner_applist_sort);
         ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
                 new String[]{"名称升序", "名称降序", "权限升序", "权限降序"});
@@ -123,20 +128,21 @@ public class AppListActivity extends BaseActivity {
 
             }
         });
+        //显示系统应用
         mCheckBoxSys = (AppCompatCheckBox) findViewById(R.id.cb_applist_showsys);
         mCheckBoxSys.setOnCheckedChangeListener((buttonView, isChecked) -> {
             List<AppModel> listNoSys = new ArrayList<>();
-            Flowable.fromIterable(listAll)
+            Flowable.fromIterable(mAdapterApp.getData())
                     .filter(model -> !model.isSystemApp())
                     .subscribe(model -> listNoSys.add(model));
-            mAdapterApp.setNewData(isChecked ? listAll : listNoSys);
+            mAdapterApp.setNewData(isChecked ? mAdapterApp.getData() : listNoSys);
 
         });
+
         mRvApps = (RecyclerView) findViewById(R.id.rv_applist);
         mRvApps.setLayoutManager(new LinearLayoutManager(this));
         mAdapterApp = new AppListAdapter();
         mRvApps.setAdapter(mAdapterApp);
-
         mAdapterApp.setOnItemClickListener((adapter, view, position) -> {
             AppModel app = (AppModel) adapter.getItem(position);
             if (mDialog == null) {
@@ -163,6 +169,7 @@ public class AppListActivity extends BaseActivity {
                         AppDetailActivity.startThisActivity(this, app.getAppPackage());
                         break;
                     case "分享":
+                        ShareUtils.shareFile(AppListActivity.this, Uri.fromFile(new File(app.getSourcePath())));
                         break;
                 }
             });
@@ -170,7 +177,7 @@ public class AppListActivity extends BaseActivity {
         });
     }
 
-    private void registerBroadcast() {
+    private void registerBroadcast() {//监听软件卸载
         mUninstallReceiver = new BroadcastReceiver() {
 
             @Override

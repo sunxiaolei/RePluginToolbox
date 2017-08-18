@@ -27,7 +27,7 @@ android {
             signingConfig signingConfigs.release
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -52,7 +52,7 @@ dependencies {
     compile rootProject.ext.dependencies['appcompat-v7']
     compile rootProject.ext.dependencies['recyclerview-v7']
     compile rootProject.ext.dependencies['cardview-v7']
-//    compile rootProject.ext.dependencies['replugin']
+    compile rootProject.ext.dependencies['replugin']
     compile rootProject.ext.dependencies['retrofit']
     compile rootProject.ext.dependencies['adapter-rxjava2']
     compile rootProject.ext.dependencies['converter-gson']
