@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 //apply plugin: 'replugin-plugin-gradle'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -73,6 +74,7 @@ dependencies {
     compile rootProject.ext.dependencies['md-dialog']
     compile rootProject.ext.dependencies['md-dialog-commons']
     compile 'com.github.promeg:tinypinyin:2.0.3'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 public class BuildTimeListener implements TaskExecutionListener, BuildListener {
@@ -116,4 +118,7 @@ public class BuildTimeListener implements TaskExecutionListener, BuildListener {
 }
 
 project.gradle.addListener(new BuildTimeListener())
+repositories {
+    mavenCentral()
+}
 
