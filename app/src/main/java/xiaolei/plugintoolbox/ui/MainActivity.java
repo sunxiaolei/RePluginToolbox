@@ -14,7 +14,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected int setContentViewId() {
-        return R.layout.p4_activity_main;
+        return R.layout.activity_main;
     }
 
     @Override
@@ -25,21 +25,23 @@ public class MainActivity extends BaseActivity {
         mAdapter = new MainAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
+        mAdapter.addData("设备信息");
         mAdapter.addData("应用管理");
         mAdapter.addData("取色器");
         mAdapter.addData("生成二维码");
 
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             Intent intent = new Intent();
-            switch (position) {
-                case 0:
+            switch (adapter.getItem(position).toString()) {
+                case "应用管理":
                     intent.setClass(MainActivity.this, AppListActivity.class);
-                    startActivity(intent);
                     break;
-                case 1:
+                case "设备信息":
+                    intent.setClass(MainActivity.this, DeviceInfoActivity.class);
                     break;
 
             }
+            startActivity(intent);
         });
     }
 }

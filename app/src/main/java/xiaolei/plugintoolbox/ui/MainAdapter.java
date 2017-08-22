@@ -1,11 +1,7 @@
 package xiaolei.plugintoolbox.ui;
 
-import android.support.annotation.Nullable;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-
-import java.util.List;
 
 import xiaolei.plugintoolbox.R;
 
@@ -16,7 +12,7 @@ import xiaolei.plugintoolbox.R;
 public class MainAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     public MainAdapter() {
-        super(R.layout.p4_item_main);
+        super(R.layout.item_main);
     }
 
     @Override

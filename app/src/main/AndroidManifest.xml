@@ -21,6 +21,7 @@
             android:name=".ui.AppListActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.AppDetailActivity"/>
+        <activity android:name=".ui.DeviceInfoActivity"/>
     </application>
 
 </manifest>

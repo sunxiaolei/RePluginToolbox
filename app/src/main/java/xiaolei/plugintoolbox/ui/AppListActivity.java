@@ -62,7 +62,7 @@ public class AppListActivity extends BaseActivity {
 
     @Override
     protected int setContentViewId() {
-        return R.layout.p4_activity_applist;
+        return R.layout.activity_applist;
     }
 
     @Override

@@ -1,11 +1,8 @@
 package xiaolei.plugintoolbox.ui;
 
-import android.support.annotation.LayoutRes;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import sunxl8.myutils.FileUtils;
 import xiaolei.plugintoolbox.R;
 import xiaolei.plugintoolbox.model.AppModel;
 
@@ -16,7 +13,7 @@ import xiaolei.plugintoolbox.model.AppModel;
 public class AppListAdapter extends BaseQuickAdapter<AppModel, BaseViewHolder> {
 
     public AppListAdapter() {
-        super(R.layout.p4_item_applist);
+        super(R.layout.item_applist);
     }
 
     @Override
