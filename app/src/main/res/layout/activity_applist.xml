@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/layout_applist_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_applist_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -63,7 +63,7 @@
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:id="@+id/layout_applist_top"
+        android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorItemBg"
@@ -72,14 +72,14 @@
         android:visibility="invisible">
 
         <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinner_applist_sort"
+            android:id="@+id/spinner_sort"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:spinnerMode="dropdown"/>
 
         <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cb_applist_showsys"
+            android:id="@+id/checkbox_sys"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -90,12 +90,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/cb_applist_showsys"
+            android:layout_toLeftOf="@id/checkbox_sys"
             android:text="显示系统应用"/>
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_applist"
+        android:id="@+id/recyclerview_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

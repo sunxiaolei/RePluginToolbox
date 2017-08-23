@@ -7,11 +7,7 @@ import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.support.v7.widget.AppCompatCheckBox
-import android.support.v7.widget.AppCompatEditText
-import android.support.v7.widget.AppCompatSpinner
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
@@ -30,8 +26,8 @@ import java.util.Collections
 
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.FlowableEmitter
 import io.reactivex.FlowableOnSubscribe
+import kotlinx.android.synthetic.main.activity_applist.*
 import sunxl8.myutils.AppUtils
 import sunxl8.myutils.FileUtils
 import sunxl8.myutils.ToastUtils
@@ -48,15 +44,13 @@ import java.util.Collections.sort
 
 class AppListActivity : BaseActivity() {
 
-    private var mEtSearch: AppCompatEditText? = null
-    private var mSpinnerSort: AppCompatSpinner? = null
-    private var mCheckBoxSys: AppCompatCheckBox? = null
-    private var mRvApps: RecyclerView? = null
     private var mAdapterApp: AppListAdapter? = null
 
     private var mDialog: MaterialDialog? = null
 
     private var listAll: List<AppModel>? = null
+    private var listFilterAll: List<AppModel>? = null
+    private var showSysApp = true
 
     private var mUninstallReceiver: BroadcastReceiver? = null
     private var uninstallPosition = 0
@@ -74,25 +68,23 @@ class AppListActivity : BaseActivity() {
 
     private fun initView() {
         tvTitle?.text = "应用列表"
-        mEtSearch = findViewById(R.id.et_search) as AppCompatEditText
-        mEtSearch!!.isEnabled = false
+        et_search.isEnabled = false
         //搜索
-        RxTextView.afterTextChangeEvents(mEtSearch!!)
+        RxTextView.afterTextChangeEvents(et_search)
                 .compose<TextViewAfterTextChangeEvent>(this.bindUntilEvent<TextViewAfterTextChangeEvent>(ActivityEvent.DESTROY))
-                .subscribe { searchApp() }
+                .subscribe { filterApp() }
         val rootView = findViewById(R.id.layout_applist_root)
         //监听键盘
         rootView!!.viewTreeObserver.addOnGlobalLayoutListener {
             val heightDiff = rootView.rootView.height - rootView.height
-            mEtSearch!!.isCursorVisible = heightDiff > 100
+            et_search.isCursorVisible = heightDiff > 100
         }
 
         //排序
-        mSpinnerSort = findViewById(R.id.spinner_applist_sort) as AppCompatSpinner
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,
                 arrayOf("名称升序", "名称降序", "权限升序", "权限降序"))
-        mSpinnerSort!!.adapter = arrayAdapter
-        mSpinnerSort!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spinner_sort.adapter = arrayAdapter
+        spinner_sort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val list = mAdapterApp!!.data
                 when (position) {
@@ -112,20 +104,14 @@ class AppListActivity : BaseActivity() {
             }
         }
         //显示系统应用
-        mCheckBoxSys = findViewById(R.id.cb_applist_showsys) as AppCompatCheckBox
-        mCheckBoxSys!!.setOnCheckedChangeListener { _, isChecked ->
-            val listNoSys = ArrayList<AppModel>()
-            Flowable.fromIterable(mAdapterApp!!.data)
-                    .filter { model -> !model.isSystemApp }
-                    .subscribe { model -> listNoSys.add(model) }
-            mAdapterApp!!.setNewData(if (isChecked) mAdapterApp!!.data else listNoSys)
-
+        checkbox_sys.setOnCheckedChangeListener { _, isChecked ->
+            showSysApp = isChecked;
+            filterApp();
         }
 
-        mRvApps = findViewById(R.id.rv_applist) as RecyclerView
-        mRvApps!!.layoutManager = LinearLayoutManager(this)
+        recyclerview_list.layoutManager = LinearLayoutManager(this)
         mAdapterApp = AppListAdapter()
-        mRvApps!!.adapter = mAdapterApp
+        recyclerview_list.adapter = mAdapterApp
         mAdapterApp!!.setOnItemClickListener { adapter, _, position ->
             val app = adapter.getItem(position) as AppModel?
             if (mDialog == null) {
@@ -201,8 +187,8 @@ class AppListActivity : BaseActivity() {
                 .compose(SchedulersCompat.applyIoSchedulers<List<AppModel>>())
                 .subscribe { models ->
                     dismissDialog()
-                    findViewById(R.id.layout_applist_top)!!.visibility = View.VISIBLE
-                    mEtSearch!!.isEnabled = true
+                    layout_top.visibility = View.VISIBLE
+                    et_search.isEnabled = true
                     sort(models)
                     mAdapterApp!!.setNewData(models)
                     listAll = models
@@ -213,18 +199,44 @@ class AppListActivity : BaseActivity() {
         if (listAll == null) {
             return
         }
-        if (TextUtils.isEmpty(mEtSearch!!.text.toString())) {
+        if (TextUtils.isEmpty(et_search.text.toString())) {
             mAdapterApp!!.setNewData(listAll)
             return
         }
         val list = ArrayList<AppModel>()
         Flowable.fromIterable(listAll!!)
                 .filter { model ->
-                    model.appName!!.contains(mEtSearch!!.text.toString().toUpperCase())
-                            || model.appPinyinHead.contains(mEtSearch!!.text.toString().toUpperCase())
+                    model.appName!!.contains(et_search.text.toString().toUpperCase())
+                            || model.appPinyinHead.contains(et_search.text.toString().toUpperCase())
                 }
                 .subscribe { model -> list.add(model) }
         mAdapterApp!!.setNewData(list)
+    }
+
+    private fun filterApp() {
+        if (listAll == null) {
+            return
+        }
+        if (TextUtils.isEmpty(et_search.text.toString())) {
+            val listNoSys = ArrayList<AppModel>()
+            Flowable.fromIterable(listAll)
+                    .filter { model -> !model.isSystemApp }
+                    .subscribe { model -> listNoSys.add(model) }
+            mAdapterApp!!.setNewData(if (showSysApp) listAll else listNoSys)
+            return
+        }
+        val list = ArrayList<AppModel>()
+        Flowable.fromIterable(listAll!!)
+                .filter { model ->
+                    model.appName!!.contains(et_search.text.toString().toUpperCase())
+                            || model.appPinyinHead.contains(et_search.text.toString().toUpperCase())
+                }
+                .subscribe { model -> list.add(model) }
+        val listNoSys = ArrayList<AppModel>()
+        Flowable.fromIterable(list)
+                .filter { model -> !model.isSystemApp }
+                .subscribe { model -> listNoSys.add(model) }
+        mAdapterApp!!.setNewData(if (showSysApp) list else listNoSys)
     }
 
     override fun onDestroy() {

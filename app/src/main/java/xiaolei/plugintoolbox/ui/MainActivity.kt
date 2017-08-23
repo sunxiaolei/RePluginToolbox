@@ -2,14 +2,13 @@ package xiaolei.plugintoolbox.ui
 
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 
 import xiaolei.plugintoolbox.R
 import xiaolei.plugintoolbox.base.BaseActivity
 
 class MainActivity : BaseActivity() {
 
-    private var mRecyclerView: RecyclerView? = null
     private var mAdapter: MainAdapter? = null
 
     override fun setContentViewId(): Int {
@@ -18,10 +17,9 @@ class MainActivity : BaseActivity() {
 
     override fun init() {
         tvTitle?.text = resources.getString(R.string.app_name)
-        mRecyclerView = findViewById(R.id.rv_main) as RecyclerView
-        mRecyclerView!!.layoutManager = LinearLayoutManager(this)
+        recyclerview_main!!.layoutManager = LinearLayoutManager(this)
         mAdapter = MainAdapter()
-        mRecyclerView!!.adapter = mAdapter
+        recyclerview_main.adapter = mAdapter
 
         mAdapter!!.addData("设备信息")
         mAdapter!!.addData("应用管理")

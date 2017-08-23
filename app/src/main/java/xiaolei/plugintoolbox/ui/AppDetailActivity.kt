@@ -7,13 +7,13 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.TextView
 
 import com.afollestad.materialdialogs.MaterialDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.jakewharton.rxbinding2.view.RxView
 import com.trello.rxlifecycle2.android.ActivityEvent
+import kotlinx.android.synthetic.main.activity_appdetail.*
 
 import java.util.Arrays
 
@@ -31,12 +31,6 @@ class AppDetailActivity : BaseActivity() {
 
     private var mAppPkg: String? = null
     private var mInfo: PackageInfo? = null
-
-    private var tvBasic: TextView? = null
-    private var tvPermissions: TextView? = null
-    private var tvActivities: TextView? = null
-    private var tvServices: TextView? = null
-    private var tvReceivers: TextView? = null
 
     override fun setContentViewId(): Int {
         return R.layout.activity_appdetail
@@ -57,24 +51,22 @@ class AppDetailActivity : BaseActivity() {
 
     private fun initView() {
         tvTitle?.text = AppUtils.getAppName(mInfo!!.packageName)
-        tvBasic = findViewById(R.id.tv_appdetail_basic) as TextView
-        tvBasic!!.text = "包名：" + mInfo!!.packageName + "\n"+
-                "Apk大小：" + FileUtils.getFileSize(mInfo!!.applicationInfo.sourceDir) + "\n"+
-                "版本名：" + mInfo!!.versionName + "\n"+
-                "版本号：" + mInfo!!.versionCode + "\n"+
-                "minSdkVersion：" + mInfo!!.applicationInfo.minSdkVersion + "\n"+
-                "targetSdkVersion：" + mInfo!!.applicationInfo.targetSdkVersion + "\n"+
-                "安装时间：" + TimeUtils.millis2String(mInfo!!.firstInstallTime) + "\n"+
-                "更新时间：" + TimeUtils.millis2String(mInfo!!.lastUpdateTime) + "\n"+
+        tv_basic.text = "包名：" + mInfo!!.packageName + "\n" +
+                "Apk大小：" + FileUtils.getFileSize(mInfo!!.applicationInfo.sourceDir) + "\n" +
+                "版本名：" + mInfo!!.versionName + "\n" +
+                "版本号：" + mInfo!!.versionCode + "\n" +
+                "minSdkVersion：" + mInfo!!.applicationInfo.minSdkVersion + "\n" +
+                "targetSdkVersion：" + mInfo!!.applicationInfo.targetSdkVersion + "\n" +
+                "安装时间：" + TimeUtils.millis2String(mInfo!!.firstInstallTime) + "\n" +
+                "更新时间：" + TimeUtils.millis2String(mInfo!!.lastUpdateTime) + "\n" +
                 "SignatureSHA1：" + AppUtils.getAppSignatureSHA1(mAppPkg)
-        tvPermissions = findViewById(R.id.tv_appdetail_permission) as TextView
-        tvPermissions!!.text = "权限列表(" + (if (mInfo!!.requestedPermissions == null) 0 else mInfo!!.requestedPermissions.size) + ")"
-        RxView.clicks(tvPermissions!!)
+        tv_permission.text = "权限列表(" + (if (mInfo!!.requestedPermissions == null) 0 else mInfo!!.requestedPermissions.size) + ")"
+        RxView.clicks(tv_permission)
                 .compose(this.bindUntilEvent<Any>(ActivityEvent.DESTROY))
                 .subscribe {
                     if (mInfo!!.requestedPermissions != null) {
                         MaterialDialog.Builder(this@AppDetailActivity)
-                                .title(tvPermissions!!.text.toString())
+                                .title(tv_permission.text.toString())
                                 .adapter(DialogPermissionAdapter(Arrays.asList(*mInfo!!.requestedPermissions)),
                                         LinearLayoutManager(this@AppDetailActivity))
                                 .positiveText("确定")
@@ -82,14 +74,13 @@ class AppDetailActivity : BaseActivity() {
                                 .show()
                     }
                 }
-        tvActivities = findViewById(R.id.tv_appdetail_activity) as TextView
-        tvActivities!!.text = "注册的Activity(" + (if (mInfo!!.activities == null) 0 else mInfo!!.activities.size) + ")"
-        RxView.clicks(tvActivities!!)
+        tv_activity.text = "注册的Activity(" + (if (mInfo!!.activities == null) 0 else mInfo!!.activities.size) + ")"
+        RxView.clicks(tv_activity)
                 .compose(this.bindUntilEvent<Any>(ActivityEvent.DESTROY))
-                .subscribe { o ->
+                .subscribe {
                     if (mInfo!!.activities != null) {
                         MaterialDialog.Builder(this@AppDetailActivity)
-                                .title(tvActivities!!.text.toString())
+                                .title(tv_activity.text.toString())
                                 .adapter(DialogActivityAdapter(Arrays.asList(*mInfo!!.activities)),
                                         LinearLayoutManager(this@AppDetailActivity))
                                 .positiveText("确定")
@@ -97,14 +88,13 @@ class AppDetailActivity : BaseActivity() {
                                 .show()
                     }
                 }
-        tvServices = findViewById(R.id.tv_appdetail_service) as TextView
-        tvServices!!.text = "注册的Service(" + (if (mInfo!!.services == null) 0 else mInfo!!.services.size) + ")"
-        RxView.clicks(tvServices!!)
+        tv_service.text = "注册的Service(" + (if (mInfo!!.services == null) 0 else mInfo!!.services.size) + ")"
+        RxView.clicks(tv_service)
                 .compose(this.bindUntilEvent<Any>(ActivityEvent.DESTROY))
-                .subscribe { o ->
+                .subscribe {
                     if (mInfo!!.services != null) {
                         MaterialDialog.Builder(this@AppDetailActivity)
-                                .title(tvServices!!.text.toString())
+                                .title(tv_service.text.toString())
                                 .adapter(DialogServiceAdapter(Arrays.asList(*mInfo!!.services)),
                                         LinearLayoutManager(this@AppDetailActivity))
                                 .positiveText("确定")
@@ -112,14 +102,13 @@ class AppDetailActivity : BaseActivity() {
                                 .show()
                     }
                 }
-        tvReceivers = findViewById(R.id.tv_appdetail_receiver) as TextView
-        tvReceivers!!.text = "注册的Receiver(" + (if (mInfo!!.receivers == null) 0 else mInfo!!.receivers.size) + ")"
-        RxView.clicks(tvReceivers!!)
+        tv_receiver.text = "注册的Receiver(" + (if (mInfo!!.receivers == null) 0 else mInfo!!.receivers.size) + ")"
+        RxView.clicks(tv_receiver)
                 .compose(this.bindUntilEvent<Any>(ActivityEvent.DESTROY))
-                .subscribe { o ->
+                .subscribe {
                     if (mInfo!!.receivers != null) {
                         MaterialDialog.Builder(this@AppDetailActivity)
-                                .title(tvReceivers!!.text.toString())
+                                .title(tv_receiver.text.toString())
                                 .adapter(DialogReceiverAdapter(Arrays.asList(*mInfo!!.receivers)),
                                         LinearLayoutManager(this@AppDetailActivity))
                                 .positiveText("确定")
