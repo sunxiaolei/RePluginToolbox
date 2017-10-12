@@ -195,24 +195,6 @@ class AppListActivity : BaseActivity() {
                 }
     }
 
-    private fun searchApp() {
-        if (listAll == null) {
-            return
-        }
-        if (TextUtils.isEmpty(et_search.text.toString())) {
-            mAdapterApp!!.setNewData(listAll)
-            return
-        }
-        val list = ArrayList<AppModel>()
-        Flowable.fromIterable(listAll!!)
-                .filter { model ->
-                    model.appName!!.contains(et_search.text.toString().toUpperCase())
-                            || model.appPinyinHead.contains(et_search.text.toString().toUpperCase())
-                }
-                .subscribe { model -> list.add(model) }
-        mAdapterApp!!.setNewData(list)
-    }
-
     private fun filterApp() {
         if (listAll == null) {
             return

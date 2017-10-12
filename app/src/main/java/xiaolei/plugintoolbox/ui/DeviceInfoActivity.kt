@@ -18,6 +18,23 @@ class DeviceInfoActivity : BaseActivity() {
 
     override fun init() {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         tv_deviceinfo.text = "设备名：" + Build.MODEL + "\n" +
                 "设备厂商：" + Build.BRAND + "\n" +
                 "SDK版本号：" + Build.VERSION.SDK_INT + "\n" +
